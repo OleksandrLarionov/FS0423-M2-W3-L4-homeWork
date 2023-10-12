@@ -10,7 +10,7 @@ const generateCards = (immagins) => {
     <h5 class="card-title">${immagin.photographer}</h5>
     <p class="card-text">${immagin.photographer_url}</p>
     <a href="#" class="btn btn-primary">coming soon</a>
-    <a href="#" class="btn btn-primary "id='hideMe'>hide</a>
+    <a href="#" class="btn btn-primary "onclick='hide(event)'>hide</a>
   </div>
 </div>
   `;
@@ -18,74 +18,78 @@ const generateCards = (immagins) => {
 	});
 };
 
+//  empty func
+const empty = () => {
+	const mainRow = document.getElementById('row');
+	mainRow.innerHTML = '';
+};
+
+// Buttons
+
 const myBtn = () => {
 	const myRow = document.getElementById('buttons');
 	const myDiv = document.createElement('div');
-	myDiv.classList.add('col-4');
-	myDiv.innerHTML = `<a class="btn btn-primary col-4" href="#" role="button" id='load'>Load</a>`;
+	myDiv.classList.add('col-6', 'justify-content-end', 'd-flex');
+	myDiv.innerHTML = `<a class="btn btn-primary my-4 col-5" href="#" role="button" id='load'>Load</a>`;
 	myRow.appendChild(myDiv);
 };
 const myBtnNext = () => {
 	const myRow = document.getElementById('buttons');
 	const myDiv = document.createElement('div');
-	myDiv.classList.add('col-4');
-	myDiv.innerHTML = `<a class="btn btn-info col-4" href="#" role="button" id='next'>next</a>`;
+	myDiv.classList.add('col-6', 'justify-content-start', 'd-flex');
+	myDiv.innerHTML = `<a class="btn btn-info my-4 col-5" href="#" role="button" id='next'>next</a>`;
 	myRow.appendChild(myDiv);
 };
 // Buttons
 myBtn();
 myBtnNext();
-
+let myUrl = 'https://api.pexels.com/v1/search?query=';
+// Buttons Events
 const loadButton = (photos) => {
 	const btn = document.getElementById('load');
 	btn.addEventListener('click', () => {
-		console.log('Eccomi');
-		generateCards(photos);
+		// console.log('load');
+		empty();
+		myContentsCall('cats');
 	});
 };
 
-let urlToUse = 'https://api.pexels.com/v1/search?query=cat';
-let dog = 'dog';
-
-const nextButton = (photos) => {
+const next = (photos) => {
 	const btn = document.getElementById('next');
 	btn.addEventListener('click', () => {
-		console.log('next');
-
-		generateCards(photos);
+		// console.log('next');
+		empty();
+		myContentsCall('dogs');
 	});
 };
-
+next();
+loadButton();
 // hide button event
-const hide = () => {
-	const btn = document.getElementById('hideMe');
-	btn.addEventListener('click', (e) => {
-		console.log('hide');
-		e.target.classList.add.toggle('visually-hidden');
-	});
+const hide = (e) => {
+	// console.log('its me mario');
+	e.target.closest('col').classList.toggle('visually-hidden');
 };
-hide();
-const myContentsCall = function () {
-	fetch(urlToUse, {
+
+const myContentsCall = function (name) {
+	fetch(myUrl + name, {
 		headers: { Authorization: 'koZ0OuD6ZL672MnYizYDeIivn7nUsQjVFye6uwyG2mnb8l3SnRwQwTUz' },
 	})
 		.then((res) => {
 			if (res.ok) {
-				console.log('tutto appo');
+				// console.log('tutto appo');
 				return res.json();
 			} else {
 				throw new Error('ERRORE');
 			}
 		})
 		.then((data) => {
-			console.log('la mia Api', data.photos);
+			// console.log('la mia Api', data.photos);
 			const photos = data.photos;
-			nextButton(photos);
+			next(photos);
 			loadButton(photos);
+			generateCards(photos);
 		})
 		.catch(function (err) {
-			console.log('Ciaone proprio');
+			console.log('Ciaone proprio', err);
 		});
 };
-
-myContentsCall();
