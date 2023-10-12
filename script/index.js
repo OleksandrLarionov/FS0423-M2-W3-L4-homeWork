@@ -43,9 +43,10 @@ const myBtnNext = () => {
 // Buttons
 myBtn();
 myBtnNext();
+
 let myUrl = 'https://api.pexels.com/v1/search?query=';
 // Buttons Events
-const loadButton = (photos) => {
+const loadButton = () => {
 	const btn = document.getElementById('load');
 	btn.addEventListener('click', () => {
 		// console.log('load');
@@ -54,7 +55,7 @@ const loadButton = (photos) => {
 	});
 };
 
-const next = (photos) => {
+const next = () => {
 	const btn = document.getElementById('next');
 	btn.addEventListener('click', () => {
 		// console.log('next');
@@ -85,8 +86,6 @@ const myContentsCall = function (name) {
 		.then((data) => {
 			// console.log('la mia Api', data.photos);
 			const photos = data.photos;
-			next(photos);
-			loadButton(photos);
 			generateCards(photos);
 		})
 		.catch(function (err) {
